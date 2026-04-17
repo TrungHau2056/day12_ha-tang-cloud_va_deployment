@@ -29,7 +29,7 @@ services:
         value: 3.11.0
       # Secrets — set qua Render Dashboard (không commit giá trị thật)
       - key: sk_OPENAI_API_KEY
-        sync: false            # sync: false = set thủ công trên dashboard
+        sync: true            # sync: false = set thủ công trên dashboard
       - key: sk_AGENT_API_KEY
         generateValue: true    # Render tự sinh random value
 

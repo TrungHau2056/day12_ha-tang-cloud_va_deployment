@@ -66,12 +66,13 @@ Runtime evidence already recorded:
 - [x] Platform added (Railway or Render or Cloud Run)
 - [x] Public endpoint tests documented
 - [x] Environment variables documented
-- [ ] Screenshots attached
+- [x] Screenshots attached
 
 Current state:
 - DEPLOYMENT.md created at repository root.
 - Public URL deployed on Railway: https://day12-production-1d49.up.railway.app
-- screenshots/ folder created with submission instructions.
+- Public URL deployed on Render: https://day12-ha-tang-cloud-va-deployment-5ld8.onrender.com/
+- screenshots/ folder contains deployment and endpoint evidence images.
 
 ---
 
@@ -84,7 +85,7 @@ Current state:
 - [x] README exists with setup instructions
 - [x] No hardcoded secrets (based on checker result)
 - [x] Public URL reachable from outside local network
-- [ ] Screenshots included (real images pending)
+- [x] Screenshots included
 - [ ] Commit history cleaned and readable
 
 ---
@@ -111,9 +112,8 @@ docker compose ps
 
 ## 5) Immediate Actions To Finish Submission
 
-1. Add real screenshots of deploy + endpoint tests into screenshots/.
-2. Set repository visibility/access for instructor.
-3. Push latest commit history and perform final submission check.
+1. Set repository visibility/access for instructor.
+2. Push latest commit history and perform final submission check.
 
 ---
 

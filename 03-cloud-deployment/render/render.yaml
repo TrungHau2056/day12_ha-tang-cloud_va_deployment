@@ -28,9 +28,9 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.0
       # Secrets — set qua Render Dashboard (không commit giá trị thật)
-      - key: OPENAI_API_KEY
+      - key: sk_OPENAI_API_KEY
         sync: false            # sync: false = set thủ công trên dashboard
-      - key: AGENT_API_KEY
+      - key: sk_AGENT_API_KEY
         generateValue: true    # Render tự sinh random value
 
     # Disk (nếu agent cần lưu file)

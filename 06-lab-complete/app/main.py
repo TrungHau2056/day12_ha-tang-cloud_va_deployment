@@ -19,6 +19,8 @@ import time
 import signal
 import logging
 import json
+import sys
+from pathlib import Path
 from datetime import datetime, timezone
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
@@ -32,7 +34,13 @@ import uvicorn
 from app.config import settings
 
 # Mock LLM (thay bằng OpenAI/Anthropic khi có API key)
-from utils.mock_llm import ask as llm_ask
+try:
+    from utils.mock_llm import ask as llm_ask
+except ModuleNotFoundError:
+    # Local fallback: allow running from 06-lab-complete while reusing root utils/
+    project_root = Path(__file__).resolve().parents[2]
+    sys.path.append(str(project_root))
+    from utils.mock_llm import ask as llm_ask
 
 # ─────────────────────────────────────────────────────────
 # Logging — JSON structured
@@ -53,6 +61,7 @@ _error_count = 0
 # ─────────────────────────────────────────────────────────
 _rate_windows: dict[str, deque] = defaultdict(deque)
 
+
 def check_rate_limit(key: str):
     now = time.time()
     window = _rate_windows[key]
@@ -66,11 +75,13 @@ def check_rate_limit(key: str):
         )
     window.append(now)
 
+
 # ─────────────────────────────────────────────────────────
 # Simple Cost Guard
 # ─────────────────────────────────────────────────────────
 _daily_cost = 0.0
 _cost_reset_day = time.strftime("%Y-%m-%d")
+
 
 def check_and_record_cost(input_tokens: int, output_tokens: int):
     global _daily_cost, _cost_reset_day
@@ -83,10 +94,12 @@ def check_and_record_cost(input_tokens: int, output_tokens: int):
     cost = (input_tokens / 1000) * 0.00015 + (output_tokens / 1000) * 0.0006
     _daily_cost += cost
 
+
 # ─────────────────────────────────────────────────────────
 # Auth
 # ─────────────────────────────────────────────────────────
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+
 
 def verify_api_key(api_key: str = Security(api_key_header)) -> str:
     if not api_key or api_key != settings.agent_api_key:
@@ -145,7 +158,8 @@ async def request_middleware(request: Request, call_next):
         # Security headers
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
-        response.headers.pop("server", None)
+        if "server" in response.headers:
+            del response.headers["server"]
         duration = round((time.time() - start) * 1000, 1)
         logger.info(json.dumps({
             "event": "request",

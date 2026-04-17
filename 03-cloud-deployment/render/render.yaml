@@ -29,11 +29,8 @@ services:
         value: 3.11.0
       # Secrets — set qua Render Dashboard (không commit giá trị thật)
       - key: OPENAI_API_KEY
-        value: ""             # Render không cho commit giá trị thật vào file này
-        sync: true            # sync: false = set thủ công trên dashboard
+        sync: false            # sync: false = set thủ công trên dashboard
       - key: AGENT_API_KEY
-        value: ""
-        sync: true
         generateValue: true    # Render tự sinh random value
 
     # Disk (nếu agent cần lưu file)
@@ -49,6 +46,10 @@ services:
     name: agent-cache
     plan: free
     maxmemoryPolicy: allkeys-lru
+
+    ipAllowList:
+    - source: 0.0.0.0/0
+      description: allow all
 
 # ============================================================
 # Cách deploy:
